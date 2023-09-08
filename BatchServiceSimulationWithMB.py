@@ -40,7 +40,7 @@ class BatchServiceSimulationWithMB:
     def handle_arrival_event(self):
         print('Arrival')
         #time_since_last_event = self.current_time - self.event_time[-1] if self.event_time else 0
-        time_since_last_event = self.current_time - self.post_time if self.event_time else 0
+        time_since_last_event = self.current_time - self.post_time
         self.cumulative_people_time += time_since_last_event * self.total_people
         print('現在時刻:{0}'.format( self.current_time))
         print('Event時刻:{0}'.format(self.event_time[-1]  if self.event_time else 0))
@@ -68,7 +68,7 @@ class BatchServiceSimulationWithMB:
     def handle_departure_event(self):
         print('Departure')
         #time_since_last_event = self.current_time - self.event_time[-1] if self.event_time else 0
-        time_since_last_event = self.current_time - self.post_time if self.event_time else 0
+        time_since_last_event = self.current_time - self.post_time
         self.cumulative_people_time += time_since_last_event * self.total_people
         print('現在時刻:{0}'.format( self.current_time))
         print('Event時刻:{0}'.format(self.event_time[-1]  if self.event_time else 0))
