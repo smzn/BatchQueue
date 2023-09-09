@@ -38,15 +38,15 @@ class BatchServiceSimulationWithMB:
                 self.handle_departure_event()
 
     def handle_arrival_event(self):
-        print('Arrival')
+        #print('Arrival')
         #time_since_last_event = self.current_time - self.event_time[-1] if self.event_time else 0
         time_since_last_event = self.current_time - self.post_time
         self.cumulative_people_time += time_since_last_event * self.total_people
-        print('現在時刻:{0}'.format( self.current_time))
-        print('Event時刻:{0}'.format(self.event_time[-1]  if self.event_time else 0))
-        print('時間間隔:{0}'.format(time_since_last_event))
-        print('系内人数:{0}'.format(self.total_people))
-        print('累積人数時間:{0}'.format(self.cumulative_people_time))
+        #print('現在時刻:{0}'.format( self.current_time))
+        #print('Event時刻:{0}'.format(self.event_time[-1]  if self.event_time else 0))
+        #print('時間間隔:{0}'.format(time_since_last_event))
+        #print('系内人数:{0}'.format(self.total_people))
+        #print('累積人数時間:{0}'.format(self.cumulative_people_time))
         
         self.post_time = self.current_time
         self.current_time = self.next_arrival
@@ -66,15 +66,15 @@ class BatchServiceSimulationWithMB:
         self.next_arrival = self.current_time + np.random.exponential(1 / self.lambda_rate)
 
     def handle_departure_event(self):
-        print('Departure')
+        #print('Departure')
         #time_since_last_event = self.current_time - self.event_time[-1] if self.event_time else 0
         time_since_last_event = self.current_time - self.post_time
         self.cumulative_people_time += time_since_last_event * self.total_people
-        print('現在時刻:{0}'.format( self.current_time))
-        print('Event時刻:{0}'.format(self.event_time[-1]  if self.event_time else 0))
-        print('時間間隔:{0}'.format(time_since_last_event))
-        print('累積人数時間:{0}'.format(self.cumulative_people_time))
-        print('系内人数:{0}'.format(self.total_people))
+        #print('現在時刻:{0}'.format( self.current_time))
+        #print('Event時刻:{0}'.format(self.event_time[-1]  if self.event_time else 0))
+        #print('時間間隔:{0}'.format(time_since_last_event))
+        #print('累積人数時間:{0}'.format(self.cumulative_people_time))
+        #print('系内人数:{0}'.format(self.total_people))
         
         self.post_time = self.current_time
         self.current_time = self.next_departure
@@ -116,6 +116,8 @@ class BatchServiceSimulationWithMB:
 
     def calculate_metrics(self):
         avg_num_in_system = self.cumulative_people_time / self.current_time
+        std_dev_num_in_system = np.std(self.num_in_system)  # 系内人数の標準偏差を計算
+        ci_95 = 1.96 * std_dev_num_in_system   # 信頼区間を計算
         avg_queue_length = avg_num_in_system - (np.mean(self.server_utilization) * self.m)
         avg_server_utilization = np.mean(self.server_utilization)
 
@@ -128,6 +130,8 @@ class BatchServiceSimulationWithMB:
         
         # Print the metrics
         print(f"平均系内人数（シミュレーション）: {avg_num_in_system}")
+        print(f"系内人数の標準偏差: {std_dev_num_in_system}")
+        print(f"平均系内人数の信頼区間(95%): ({avg_num_in_system - ci_95}, {avg_num_in_system + ci_95})")
         print(f"平均待ち人数（シミュレーション）: {avg_queue_length}")
         print(f"平均サーバー利用率（シミュレーション）: {avg_server_utilization}")
         print(f"システム利用率（理論値）: {rho_theoretical}")
