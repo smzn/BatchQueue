@@ -7,7 +7,7 @@ class BlockChain_lib:
         self.lmd = lmd #トランザクションの到着率
         self.mean = mean #1トランザクションの大きさの平均(正規分布)
         self.sd = sd #1トランザクションの大きさの標準偏差(正規分布)
-        self.capacity = 1000000 #1ブロックは1MByteまで
+        #self.capacity = 1000000 #1ブロックは1MByteまで
         self.capacity = capacity
         #self.block_meantime = 60 * 10 #(約10分)
         self.block_meantime = block_meantime
@@ -52,6 +52,7 @@ class BlockChain_lib:
                     block_volume += cur_volume #到着トランザクションをブロックに格納
                     block_count += 1 #ブロックのトランザクション格納数を増やす
                     #print("ブロックに格納 ブロック容量:{0}, ブロック内TS数{1}".format(block_volume, block_count))
+                    #print(self.capacity)
                     if(block_volume > self.capacity):#ブロックの規定量より大きくなったら
                         block_service = self.getEXP(self.block_meantime) #ブロックのサービス時間を設定
                         #block_count = 1 #ブロック中のトランザクションは今回の到着のみ
@@ -109,3 +110,12 @@ class BlockChain_lib:
         plt.grid(True)
         plt.savefig(filename) # This line saves the graph as a file
         plt.show()
+
+if __name__ == '__main__':
+    lmd = 1.0 #トランザクションの到着率
+    mean = 550 #トランザクションの大きさの平均
+    sd = 50 #トランザクションの大きさの標準偏差
+    time = 100000 #上限時間
+    blib = BlockChain_lib(lmd, mean, sd, time)
+    blib.getSimulation()
+    blib.getGraph()
