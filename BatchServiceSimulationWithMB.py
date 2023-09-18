@@ -132,12 +132,13 @@ class BatchServiceSimulationWithMB:
         print(f"平均系内人数（シミュレーション）: {avg_num_in_system}")
         print(f"系内人数の標準偏差: {std_dev_num_in_system}")
         print(f"平均系内人数の信頼区間(95%): ({avg_num_in_system - ci_95}, {avg_num_in_system + ci_95})")
-        print(f"平均待ち人数（シミュレーション）: {avg_queue_length}")
         print(f"平均サーバー利用率（シミュレーション）: {avg_server_utilization}")
-        print(f"システム利用率（理論値）: {rho_theoretical}")
-#        print(f"システム利用率（シミュレーション）: {rho_simulated}")
 
-        return avg_num_in_system, avg_queue_length, avg_server_utilization, rho_theoretical
+        #print(f"平均待ち人数（シミュレーション）: {avg_queue_length}")
+        #print(f"システム利用率（理論値）: {rho_theoretical}")
+        #print(f"システム利用率（シミュレーション）: {rho_simulated}")
+
+        return avg_num_in_system, std_dev_num_in_system, avg_server_utilization
 
 if __name__ == "__main__":
     # Parameters
@@ -145,7 +146,7 @@ if __name__ == "__main__":
     mu = 3  # service rate (batches per minute)
     a, b = 3, 5  # min and max batch size for service
     m = 3  # number of servers
-    sim_time = 6000  # simulation time in minutes
+    sim_time = 10000  # simulation time in minutes
     c, d = 3, 5  # min and max batch size in arrivals
 
     # Create simulation object
@@ -154,8 +155,9 @@ if __name__ == "__main__":
     # Run the simulation
     simulation.run_simulation()
 
+    # Calculate metrics
+    avg_num_in_system, std_dev_num_in_system, avg_server_utilization = simulation.calculate_metrics()
+
     # Plot the results
     simulation.plot_results("batch_simulation_with_MB.png")
 
-    # Calculate metrics
-    avg_num_in_system, avg_queue_length, avg_server_utilization, rho_theoretical = simulation.calculate_metrics()
